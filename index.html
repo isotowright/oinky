@@ -1,0 +1,94 @@
+<script type="text/javascript" src="https://cloud.smartables.io/webSocketClient.js"></script>
+<script type="text/javascript">
+
+// Setup your personal infos here:
+var API_ID     = 'O6vnBwxFTg',
+    API_SECRET = 'PEU664HSW6',
+    BOARD_ID   = 'A5GK5I4VJQ';
+
+// Start new websocket istance.
+var client = new Messaging.Client("cloud.smartables.io", 8001, RandomClientId());
+console.log("Client instantiated.");
+client.startTrace();
+console.log("Now trying to connect...");
+client.qos = 0;
+client.connect({
+  useSSL: true,
+  userName: API_ID,
+  password: API_SECRET,
+  onSuccess: onSuccess,
+  onFailure: onFailure,
+  timeout:10
+});
+
+// Function to trigger connection success.
+// Do the main JOBs here!
+function onSuccess() {
+  console.log("connection established");
+
+  // Sample code for subscribe a specific topic.
+  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
+  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/3');
+
+  // Sample code to emit a websocket message.
+  var message = new Messaging.Message(JSON.stringify({
+     "foo": "bar"
+  }));
+  message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/2';
+  message.qos = 2;
+  message.retained = true;
+  client.send(message);
+  
+ 
+}
+
+// Attach a function when a new message is received.
+client.onMessageArrived = function(message) {
+	//alert('ddd');
+	console.log(message.payloadString);
+	if (message.payloadString == '{"dig":0}')
+	{
+		//alert('switch off');
+		console.log("switch on");
+		   message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/3';
+  message.qos = 2;
+  message.retained = true;
+  client.send(message);
+	}
+	else
+	{
+		//alert('switch on');
+		 console.log("switch off");
+		
+	}
+  
+}
+
+// Function to trigger connection error.
+function onFailure() {
+  console.log("connection failure");
+}
+
+// Attach a function when connection lost.
+client.onConnectionLost = function() {
+  console.log("connection lost");
+}
+
+
+
+request.put({
+  url: 'https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/2',
+  headers: {
+    'X-APISecret': 'PEU664HSW6'
+    },
+  json: true,
+  strictSSL: false,
+  body: {"foo": "bar"}
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body.message) // Returns the result's message.
+    }
+  }
+);
+</script>
+
