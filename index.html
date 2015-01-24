@@ -1,12 +1,12 @@
+
 <script type="text/javascript" src="https://cloud.smartables.io/webSocketClient.js"></script>
 <script type="text/javascript">
 //setTimeout(function(){ alert("Hello"); }, 3000);
 var donation = 0;
 // Setup your personal infos here:
-var API_ID     = 'O6vnBwxFTg',
-    API_SECRET = 'PEU664HSW6',
-    BOARD_ID   = 'A5GK5I4VJQ';
-
+var API_ID = 'O6vnBwxFTg',
+API_SECRET = 'PEU664HSW6',
+BOARD_ID = 'A5GK5I4VJQ';
 // Start new websocket istance.
 var client = new Messaging.Client("cloud.smartables.io", 8001, RandomClientId());
 console.log("Client instantiated.");
@@ -14,118 +14,111 @@ client.startTrace();
 console.log("Now trying to connect...");
 client.qos = 0;
 client.connect({
-  useSSL: true,
-  userName: API_ID,
-  password: API_SECRET,
-  onSuccess: onSuccess,
-  onFailure: onFailure,
-  timeout:10
+useSSL: true,
+userName: API_ID,
+password: API_SECRET,
+onSuccess: onSuccess,
+onFailure: onFailure,
+timeout:10
 });
-
 // Function to trigger connection success.
 // Do the main JOBs here!
 function onSuccess() {
-  console.log("connection established");
-
-  // Sample code for subscribe a specific topic.
-  //client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
-  
-  
-  // the accel
-  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/10_1');
-  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/1');
-	//curl -k -X PUT --data '{"rgb":[1,199,50,167]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/1"
-  // Sample code to emit a websocket message.
-  var message = new Messaging.Message(JSON.stringify({
-    "rgb":[1,245,10,174]
- }));
- message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/1 ';
-  message.qos = 2;
-  message.retained = true;
-  client.send(message);
-  
- 
+console.log("connection established");
+// Sample code for subscribe a specific topic.
+//client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
+// the accel
+client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/10_1');
+client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/1');
+//curl -k -X PUT --data '{"rgb":[1,199,50,167]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/1"
+// Sample code to emit a websocket message.
+//var message = new Messaging.Message(JSON.stringify({
+//"rgb":[1,245,10,174]
+//}));
+//message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/1 ';
+//message.qos = 2;
+//message.retained = true;
+//client.send(message);
 }
-
 // Attach a function when a new message is received.
 client.onMessageArrived = function(message) {
-	//alert('ddd');
-	console.log(message.payloadString);
-	var obj = $.parseJSON(message.payloadString);
-	console.log(obj);
-	if (obj.single_tap == 1)
-	{
-		//$('#accel').text('Single tap');
-	}
-	if (obj.double_tap == 1)
-	{
-		donation++;
-		
-		var monies = donation.toFixed(2);
-		$('#anount').text('£'+monies);
-		$('#accel').text('Double tap');
-	}
-	
-	//
-	//if (message.payloadString == '{"dig":0}')
-	//{
-	//	$('#switch').text('Switch is off');
-		//curl -k -X PUT --data '{"rgb":[1,26,5,19]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/
-		//alert('switch off');
-		//console.log("switch on");
-		  // message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/3';
- 		 //message.qos = 2;
- 		 //message.retained = true;
- 		 //client.send(message);
-	//}
-	
-  
+//alert('ddd');
+console.log(message.payloadString);
+var obj = $.parseJSON(message.payloadString);
+console.log(obj);
+if (obj.single_tap == 1)
+{
+//$('#accel').text('Single tap');
+
+var message = new Messaging.Message(JSON.stringify({
+"rgb":[1,200,200,209]
+}));
+message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/1 ';
+message.qos = 2;
+message.retained = true;
+client.send(message);
+
 }
 
+if (obj.double_tap == 1)
+{
+donation++;
+var monies = donation.toFixed(2);
+$('#anount').text('£'+monies);
+$('#accel').text('Double tap');
+
+//curl -k -X PUT --data '{"rgb":[1,31,61,209]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/1"
+
+var message = new Messaging.Message(JSON.stringify({
+"rgb":[1,31,61,209]
+}));
+message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/1 ';
+message.qos = 2;
+message.retained = true;
+client.send(message);
+}
+//
+//if (message.payloadString == '{"dig":0}')
+//{
+// $('#switch').text('Switch is off');
+//curl -k -X PUT --data '{"rgb":[1,26,5,19]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/
+//alert('switch off');
+//console.log("switch on");
+// message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/3';
+//message.qos = 2;
+//message.retained = true;
+//client.send(message);
+//}
+}
 // Function to trigger connection error.
 function onFailure() {
-  console.log("connection failure");
+console.log("connection failure");
 }
-
 // Attach a function when connection lost.
 client.onConnectionLost = function() {
-  console.log("connection lost");
+console.log("connection lost");
 }
-
-
-
-
-
-
-
 </script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <title>Oinky</title>
- 
 <link rel="stylesheet" href="css/main.css" type="text/css" />
- 
 <!--[if IE]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <!--[if lte IE 7]>
-	<script src="js/IE8.js" type="text/javascript"></script><![endif]-->
+<script src="js/IE8.js" type="text/javascript"></script><![endif]-->
 <!--[if lt IE 7]>
- 
-	<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css"/><![endif]-->
+<link rel="stylesheet" type="text/css" media="all" href="css/ie6.css"/><![endif]-->
 </head>
- 
 <body id="index" class="home">
-	<div id="switch"></div>
-		<div id="accel"></div>
-		<div id="">
-			Amount Donated
-			<span id="anount"></span>
-		</div>
+<div id="switch"></div>
+<div id="accel"></div>
+<div id="">
+Amount Donated
+<span id="anount"></span>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
 </body>
 </html>
-
