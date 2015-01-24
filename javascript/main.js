@@ -1,21 +1,14 @@
 $(document).ready(function(){
-
-  var n=0;
+  monies = 0;	
+  var n=1;
   setInterval(increment,1000);
-
-   var animationLength = 5000;
-    $('#savingbar').change(function(){ 
-    animationLength = $(this).val() * 1000;
-    animateLoad(animationLength);
-      });
-  
-  animateLoad(animationLength);
 
   function increment(){
     n++;
     setCounter(n);
+ 
   }
-
+  
   function setCounter(v){
     var counter=$(".counter");
     var old=counter.children(".counter-value");
@@ -33,8 +26,8 @@ $(document).ready(function(){
     setTimeout(function(){old.remove()},t*1000);
     
     var neu=$("<div/>").addClass("counter-value").appendTo(counter);
-    var neuContent=$("<div/>").addClass("counter-value-mask").appendTo(neu).text('£'+v);
-    var saving=$(".loading").css('height',v+'%');
+    var neuContent=$("<div/>").addClass("counter-value-mask").appendTo(neu).text('£'+monies);
+    var saving=$(".loading").css('height',monies+'%');
     
     w=neuContent.width();
     neu.data("w",w);

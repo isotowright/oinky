@@ -1,9 +1,10 @@
 
 <script type="text/javascript" src="https://cloud.smartables.io/webSocketClient.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.12.1/TweenMax.min.js"></script>
+<script src="javascript/main.js"></script>
+
 <script type="text/javascript">
-
-
-   
 
 //setTimeout(function(){ alert("Hello"); }, 3000);
 var donation = 0;
@@ -67,9 +68,10 @@ client.send(message);
 if (obj.double_tap == 1)
 {
 donation++;
-var monies = donation.toFixed(2);
+monies = donation;
 $('#anount').text('£'+monies);
-$('#accel').text('Double tap');
+//$('#accel').text('Double tap');
+//console.log($('#accel').text('Double tap'));
  jQuery('#player').get(0).play();
  
   jQuery('#player').get(0).stop();
@@ -112,8 +114,10 @@ console.log("connection lost");
 <head>
 <meta charset="utf-8" />
 <title>Oinky</title>
+
 <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="css/main.css" type="text/css" />
+
 <!--[if IE]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 <!--[if lte IE 7]>
@@ -154,9 +158,7 @@ console.log("connection lost");
 
 
 <div id="">
-Amount Donated <span id="anount"></span>
 <audio id="player" preload="auto" autobuffer> <source src="mario.mp3" /></audio>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </body>
 </html>
