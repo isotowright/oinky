@@ -28,16 +28,19 @@ function onSuccess() {
   console.log("connection established");
 
   // Sample code for subscribe a specific topic.
-  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
-  //client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/3');
-
+  //client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
+  
+  
+  // the accel
+  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/10_1');
+	//curl -k -X PUT --data '{"rgb":[1,199,50,167]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/1"
   // Sample code to emit a websocket message.
   //var message = new Messaging.Message(JSON.stringify({
-   //  "foo": "bar"
-  //}));
-  //message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/2 ';
-  //message.qos = 2;
-  //message.retained = true;
+    // "rgb": "1,199,50,167"
+ // }));
+ // message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/1 ';
+ // message.qos = 2;
+ // message.retained = true;
   //client.send(message);
   
  
@@ -46,10 +49,22 @@ function onSuccess() {
 // Attach a function when a new message is received.
 client.onMessageArrived = function(message) {
 	//alert('ddd');
-	console.log(message.payloadString);
-	if (message.payloadString == '{"dig":0}')
+	console.log(message);
+	var obj = $.parseJSON(message.payloadString);
+	console.log(obj);
+	if (obj.single_tap == 1)
 	{
-		$('#switch').text('Switch is off');
+		$('#accel').text('Single tap');
+	}
+	if (obj.double_tap == 1)
+	{
+		$('#accel').text('Double tap');
+	}
+	
+	//
+	//if (message.payloadString == '{"dig":0}')
+	//{
+	//	$('#switch').text('Switch is off');
 		//curl -k -X PUT --data '{"rgb":[1,26,5,19]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/
 		//alert('switch off');
 		//console.log("switch on");
@@ -57,13 +72,8 @@ client.onMessageArrived = function(message) {
  		 //message.qos = 2;
  		 //message.retained = true;
  		 //client.send(message);
-	}
-	else
-	{
-		//alert('switch on');
-		$('#switch').text('Switch is on');
-		
-	}
+	//}
+	
   
 }
 
@@ -79,20 +89,10 @@ client.onConnectionLost = function() {
 
 
 
-request.put({
-  url: 'https://cloud.smartables.io/api/write/O6vnBwxFTg/A5GK5I4VJQ/ACT/2',
-  headers: {
-    'X-APISecret': 'PEU664HSW6'
-    },
-  json: true,
-  strictSSL: false,
-  body: {"foo": "bar"}
-  }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body.message) // Returns the result's message.
-    }
-  }
-);
+
+
+
+
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -113,7 +113,7 @@ request.put({
  
 <body id="index" class="home">
 	<div id="switch"></div>
-	
+		<div id="accel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 
