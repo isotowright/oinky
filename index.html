@@ -1,5 +1,6 @@
 <script type="text/javascript" src="https://cloud.smartables.io/webSocketClient.js"></script>
 <script type="text/javascript">
+//setTimeout(function(){ alert("Hello"); }, 3000);
 
 // Setup your personal infos here:
 var API_ID     = 'O6vnBwxFTg',
@@ -28,16 +29,16 @@ function onSuccess() {
 
   // Sample code for subscribe a specific topic.
   client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/2');
-  client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/3');
+  //client.subscribe(API_ID+'/'+BOARD_ID+'/SENSE/3');
 
   // Sample code to emit a websocket message.
-  var message = new Messaging.Message(JSON.stringify({
-     "foo": "bar"
-  }));
-  message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/2 ';
-  message.qos = 2;
-  message.retained = true;
-  client.send(message);
+  //var message = new Messaging.Message(JSON.stringify({
+   //  "foo": "bar"
+  //}));
+  //message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/2 ';
+  //message.qos = 2;
+  //message.retained = true;
+  //client.send(message);
   
  
 }
@@ -48,18 +49,19 @@ client.onMessageArrived = function(message) {
 	console.log(message.payloadString);
 	if (message.payloadString == '{"dig":0}')
 	{
+		$('#switch').text('Switch is off');
 		//curl -k -X PUT --data '{"rgb":[1,26,5,19]}' --header "X-APISecret: PEU664HSW6" -H "Content-Type: application/json" "https://cloud.smartables.io/api/
 		//alert('switch off');
-		console.log("switch on");
-		   message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/3';
- 		 message.qos = 2;
- 		 message.retained = true;
- 		 client.send(message);
+		//console.log("switch on");
+		  // message.destinationName = API_ID+'/'+BOARD_ID+'/ACT/3';
+ 		 //message.qos = 2;
+ 		 //message.retained = true;
+ 		 //client.send(message);
 	}
 	else
 	{
 		//alert('switch on');
-		 console.log("switch off");
+		$('#switch').text('Switch is on');
 		
 	}
   
@@ -110,6 +112,11 @@ request.put({
 </head>
  
 <body id="index" class="home">
+	<div id="switch"></div>
+	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
 </body>
 </html>
 
